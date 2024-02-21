@@ -1,0 +1,537 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Alu_Disci {
+  ra       Int
+  nomeDisc String @db.VarChar(45)
+
+  @@id([ra, nomeDisc])
+  @@map("Alu/Disci")
+}
+
+model AlunoH {
+  ra   Int     @id
+  nome String? @db.VarChar(255)
+}
+
+model AlunoHib {
+  ra   Int     @id
+  nome String? @db.VarChar(255)
+}
+
+model AlunoJava {
+  RA   Int     @id
+  Nome String? @db.VarChar(45)
+}
+
+model AnimalJava {
+  idAnimalJava Int     @id @default(autoincrement())
+  nome         String  @db.VarChar(45)
+  nomeDono     String? @db.VarChar(45)
+  peso         Int?
+  idade        Int?
+  especie      String? @db.VarChar(45)
+  raca         String? @db.VarChar(45)
+}
+
+model AnimeJava {
+  Nome    String  @id @db.VarChar(90)
+  AnoLanc Int?
+  Ep      Int?
+  Gen     String? @db.VarChar(45)
+}
+
+model Associado {
+  codigo   Int    @id
+  nome     String @db.Char(40)
+  endereco String @db.Char(35)
+  cidade   String @db.Char(20)
+  estado   String @db.Char(2)
+  cep      String @db.Char(9)
+  plano    String @db.Char(2)
+  Plano    Plano  @relation(fields: [plano], references: [numero], onUpdate: Restrict, map: "Associado_ibfk_1")
+
+  @@index([plano], map: "plano")
+}
+
+model DisciplinaH {
+  cod    Int    @id @default(autoincrement())
+  cargah Int?
+  des    String @db.VarChar(100)
+}
+
+model DiscplinaHib {
+  cod       Int    @id @default(autoincrement())
+  cargah    Int?
+  descricao String @db.VarChar(100)
+}
+
+model Empregado {
+  codigo   Int       @id @default(autoincrement())
+  nome     String?   @db.VarChar(40)
+  setor    String?   @db.VarChar(2)
+  cargo    String?   @db.VarChar(20)
+  salario  Decimal?  @db.Decimal(10, 2)
+  admissao DateTime? @db.Date
+}
+
+model Estudio_Aluno {
+  CPFAluno         String  @id @db.VarChar(45)
+  nomeAluno        String? @db.VarChar(45)
+  ruaAluno         String? @db.VarChar(45)
+  numeroAluno      String? @db.VarChar(45)
+  bairroAluno      String? @db.VarChar(45)
+  complementoAluno String? @db.VarChar(45)
+  CEPAluno         String? @db.VarChar(45)
+  cidadeAluno      String? @db.VarChar(45)
+  estadoAluno      String? @db.VarChar(45)
+  telefoneAluno    String? @db.VarChar(45)
+  emailAluno       String? @db.VarChar(45)
+  fotoAluno        Bytes?
+  Ativo            Int?    @default(0)
+}
+
+model Estudio_Login {
+  usuario String @id @db.VarChar(45)
+  senha   String @db.VarChar(50)
+  tipo    Int?
+}
+
+model Estudio_Modalidade {
+  idEstudio_Modalidade Int     @id @default(autoincrement())
+  descricaoModalidade  String? @db.VarChar(45)
+  precoModalidade      Float?
+  qtdeAlunos           Int?
+  qtdeAulas            Int?
+  ativa                Int?    @default(0)
+}
+
+model Estudio_Turma {
+  idEstudio_Turma       Int     @default(autoincrement())
+  idEstudio_Modalidade  Int
+  Professor             String? @default("Null") @db.VarChar(45)
+  Dia_semana            String? @default("Null") @db.VarChar(45)
+  Horas                 String? @default("Null") @db.VarChar(45)
+  n_alunos_matriculados Int?
+  ativa                 Int?    @default(0)
+
+  @@id([idEstudio_Turma, idEstudio_Modalidade])
+}
+
+model ItemPedido {
+  id           Int @id @default(autoincrement())
+  codigoPedido Int
+  codigoItem   Int
+  quantidade   Int
+}
+
+model Livros {
+  livro   String  @id @db.VarChar(100)
+  autor   String? @db.VarChar(100)
+  sexo    String? @db.Char(1)
+  paginas Int?
+  editora String? @db.VarChar(30)
+  valor   Float?  @db.Float
+  uf      String? @db.Char(2)
+  ano     Int?
+}
+
+model Pedido {
+  codigo      Int       @id
+  cliente     String    @db.VarChar(255)
+  dataPedido  DateTime? @db.Date
+  dataEntrega DateTime? @db.Date
+  status      String?   @default("Recebido") @db.VarChar(50)
+  OSMG        Int?
+  observacoes String?   @db.Text
+}
+
+model Plano {
+  numero    String      @id @db.Char(2)
+  descricao String      @db.Char(30)
+  valor     Decimal     @db.Decimal(10, 2)
+  Associado Associado[]
+}
+
+model Produto {
+  codigo_Produto    Int     @id @default(autoincrement())
+  descricao_produto String? @db.VarChar(50)
+  preco_produto     Float?  @db.Float
+  peso              Float?  @db.Float
+}
+
+model ProfHib {
+  matricula Int     @id
+  nome      String? @db.VarChar(255)
+}
+
+model Professor {
+  matricula Int     @id @default(autoincrement())
+  email     String? @unique(map: "UK_47iiro4c3fqtgbdw7u9655wsn") @db.VarChar(255)
+  nome      String  @db.VarChar(100)
+  sal       Float?
+}
+
+model ProfessorH {
+  Matricula Int     @id @default(autoincrement())
+  email     String? @unique(map: "UK_fca4hjrxin1oi91qxtf5o71lk") @db.VarChar(255)
+  nome      String  @db.VarChar(100)
+  sal       Float?
+}
+
+model Prova {
+  RG         String  @id @db.VarChar(15)
+  nome       String  @db.VarChar(45)
+  sexo       String? @db.VarChar(15)
+  datanasci  String? @db.VarChar(45)
+  peso       Int?
+  modalidade String  @db.VarChar(45)
+}
+
+model Saldo_RU {
+  idSaldo_RU Int      @id @default(autoincrement())
+  RA         String   @db.VarChar(45)
+  Senha      String   @db.VarChar(45)
+  Saldo      Decimal? @db.Decimal(10, 0)
+}
+
+model ServiceJava {
+  idServiceJava Int     @id @default(autoincrement())
+  tipo          String  @db.VarChar(45)
+  valor         Float
+  vet           String? @db.VarChar(45)
+}
+
+model Todo {
+  id        Int       @id @default(autoincrement())
+  title     String    @db.VarChar(255)
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @default(now()) @db.DateTime(0)
+  completed Int?      @default(0)
+}
+
+model Vendas {
+  numero_NF     Int    @id @default(autoincrement())
+  ICMS          Float? @db.Float
+  valortotal_NF Float? @db.Float
+}
+
+model achadios_perdidos {
+  id       BigInt    @id @default(autoincrement())
+  material String    @db.VarChar(150)
+  local    String    @db.VarChar(200)
+  campus   Int
+  data     DateTime? @db.DateTime(6)
+}
+
+model aluno {
+  id       Int    @id @default(autoincrement())
+  ra       String @unique(map: "ra_UNIQUE") @db.VarChar(45)
+  name     String @db.VarChar(45)
+  password String @db.VarChar(255)
+}
+
+model aluno_intellij {
+  ra   Int     @id
+  nome String? @db.VarChar(255)
+}
+
+model aluno_web {
+  ra   Int     @id @default(autoincrement())
+  nome String? @db.VarChar(255)
+}
+
+model alunos {
+  ra          String  @id @db.VarChar(15)
+  nome        String  @db.VarChar(50)
+  curso       String? @db.VarChar(15)
+  foto        Bytes?
+  arquivoFoto String? @db.VarChar(255)
+}
+
+model bandeco {
+  idbandeco    Int    @id @default(autoincrement())
+  nome         String @db.VarChar(60)
+  idade        Int
+  departamento String @db.VarChar(45)
+  cpf          String @unique(map: "cpf_UNIQUE") @db.VarChar(45)
+  foto         Bytes?
+}
+
+model cardapio {
+  codigo      BigInt    @id @default(autoincrement())
+  data        DateTime? @db.DateTime(6)
+  periodo     Int
+  analisado   Int?
+  principal   String    @db.VarChar(100)
+  guarnicao   String    @db.VarChar(100)
+  salada      String    @db.VarChar(100)
+  sobremesa   String    @db.VarChar(100)
+  sopa        String    @default("-") @db.VarChar(100)
+  responsavel String?   @default("Roberto") @db.Char(30)
+  observacao  String?   @default("fon") @db.Char(255)
+  soObs       Int?      @default(0)
+  proteina    String?   @default("-") @db.VarChar(100)
+  vegetariano Int
+  suco        String?   @db.VarChar(100)
+}
+
+model carros {
+  renavam       String         @id @db.Char(12)
+  modelo        String?        @db.Char(20)
+  marca         String?        @db.Char(20)
+  cor           String?        @db.Char(10)
+  rg            String?        @db.Char(16)
+  proprietarios proprietarios? @relation(fields: [rg], references: [rg], onDelete: Restrict, onUpdate: Restrict, map: "carros_ibfk_1")
+
+  @@index([rg], map: "rg")
+}
+
+model categoria {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+}
+
+model check_records {
+  id         Int       @id @default(autoincrement())
+  teacher_id Int?
+  enter      Int?
+  schedule   DateTime? @db.DateTime(0)
+  teacher    teacher?  @relation(fields: [teacher_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "check_records_ibfk_1")
+
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model cliente {
+  codigo   Int     @id
+  nome     String  @db.Char(40)
+  endereco String  @db.Char(50)
+  cidade   String  @db.Char(20)
+  estado   String  @db.Char(2)
+  cep      String  @db.Char(9)
+  conta    conta[]
+}
+
+model cliente_projeto {
+  cod   Int     @id
+  email String? @db.VarChar(255)
+  nome  String? @db.VarChar(255)
+}
+
+model conta {
+  numero     Int      @id
+  valor      Decimal  @db.Decimal(10, 2)
+  vencimento DateTime @db.Date
+  codcli     Int
+  cliente    cliente  @relation(fields: [codcli], references: [codigo], onUpdate: Restrict, map: "conta_ibfk_1")
+
+  @@index([codcli], map: "codcli")
+}
+
+model contareceber {
+  Nome       String?   @db.VarChar(40)
+  Numero     Int       @id
+  Valor      Decimal?  @db.Decimal(10, 2)
+  Vencimento DateTime? @db.Date
+  Banco      String?   @db.VarChar(20)
+}
+
+model curso {
+  codigo  Int       @id
+  nome    String?   @db.VarChar(45)
+  ch      Int?
+  inicio  DateTime? @db.Date
+  termino DateTime? @db.Date
+}
+
+model food {
+  id    BigInt  @id @default(autoincrement())
+  title String  @db.VarChar(45)
+  image String? @db.VarChar(45)
+  price Float
+}
+
+model login {
+  id         Int     @id
+  usuario    String  @db.VarChar(255)
+  level      Int
+  senha_hash String? @db.VarChar(255)
+  email      String? @db.VarChar(255)
+}
+
+model matricula {
+  curso Int
+  ra    Int
+  data  DateTime? @db.Date
+  valor Float?    @db.Float
+
+  @@id([curso, ra])
+}
+
+model medico_intellij {
+  id    Int     @id
+  espec String? @db.VarChar(255)
+  nome  String? @db.VarChar(255)
+}
+
+model new_table {
+  idFuncionario Int  @id @default(autoincrement())
+  idSupervisor  Int?
+}
+
+model paciente_intellij {
+  cpf    Int     @id
+  doen_a String? @map("doença") @db.VarChar(255)
+  nome   String? @db.VarChar(255)
+}
+
+model pessoa {
+  codigo   Int     @id @default(autoincrement())
+  nome     String  @db.VarChar(15)
+  email    String? @db.VarChar(30)
+  telefone String? @db.VarChar(8)
+}
+
+model produtoTCC {
+  code          Int     @id @default(autoincrement())
+  nome          String  @db.VarChar(255)
+  category      Int
+  unidadeMedida Int
+  arquivoFoto   String? @db.VarChar(255)
+  quantidade    Int
+}
+
+model produto_projeto {
+  cod   Int     @id
+  des   String? @db.VarChar(255)
+  marca String? @db.VarChar(255)
+  prec  Float?
+}
+
+model prof_web {
+  matricula Int     @id
+  nome      String? @db.VarChar(255)
+}
+
+model proprietarios {
+  rg     String   @id @db.Char(16)
+  nome   String?  @db.Char(40)
+  carros carros[]
+}
+
+model role {
+  id          BigInt        @id @default(autoincrement())
+  name        String?       @db.VarChar(255)
+  user        user[]
+  users       users[]
+  users_role  users_role[]  @ignore
+  users_roles users_roles[] @ignore
+}
+
+model saldo {
+  id      Int   @id @default(autoincrement())
+  idAluno Int   @unique(map: "idAluno_UNIQUE")
+  saldo   Float @db.Float
+}
+
+model schedule {
+  id          Int     @id @default(autoincrement())
+  teacher_id  Int?
+  day_of_week Int?
+  start_time  String? @db.VarChar(10)
+  end_time    String? @db.VarChar(10)
+  total_hours String? @db.VarChar(10)
+}
+
+model teacher {
+  id            Int             @id @default(autoincrement())
+  nome          String          @db.VarChar(255)
+  check_records check_records[]
+}
+
+model transaction {
+  id                                   BigInt    @id @default(autoincrement())
+  amount                               Decimal?  @db.Decimal(38, 2)
+  timestamp                            DateTime? @db.DateTime(6)
+  receiver_id                          BigInt?
+  sender_id                            BigInt?
+  users_transaction_sender_idTousers   users?    @relation("transaction_sender_idTousers", fields: [sender_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK50yuof9hx3g12grbg68wc5n2i")
+  users_transaction_receiver_idTousers users?    @relation("transaction_receiver_idTousers", fields: [receiver_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FKsv2y5gvlk351bf2b8kao6o7n9")
+
+  @@index([sender_id], map: "FK50yuof9hx3g12grbg68wc5n2i")
+  @@index([receiver_id], map: "FKsv2y5gvlk351bf2b8kao6o7n9")
+}
+
+model unidadeMedida {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+}
+
+model user {
+  id       BigInt  @id @default(autoincrement())
+  username String  @unique(map: "username_UNIQUE") @db.VarChar(45)
+  password String  @db.VarChar(255)
+  role_id  BigInt?
+  role     role?   @relation(fields: [role_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FKn82ha3ccdebhokx3a8fgdqeyy")
+
+  @@index([role_id], map: "FKn82ha3ccdebhokx3a8fgdqeyy")
+}
+
+model users {
+  id                                         BigInt        @id @default(autoincrement())
+  password                                   String?       @db.VarChar(255)
+  role_id                                    BigInt?
+  balance                                    Decimal?      @db.Decimal(38, 2)
+  document                                   String?       @unique(map: "UK_kgnb8tmua5cirywqjj4m3id0l") @db.VarChar(255)
+  email                                      String?       @unique(map: "UK_6dotkott2kjsp8vw4d0m25fb7") @db.VarChar(255)
+  first_name                                 String?       @db.VarChar(255)
+  last_name                                  String?       @db.VarChar(255)
+  transaction_transaction_sender_idTousers   transaction[] @relation("transaction_sender_idTousers")
+  transaction_transaction_receiver_idTousers transaction[] @relation("transaction_receiver_idTousers")
+  role                                       role?         @relation(fields: [role_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK4qu1gr772nnf6ve5af002rwya")
+  users_role_users_role_users_idTousers      users_role[]  @relation("users_role_users_idTousers") @ignore
+  users_role_users_role_user_idTousers       users_role[]  @relation("users_role_user_idTousers") @ignore
+  users_roles                                users_roles[] @ignore
+
+  @@index([role_id], map: "FK4qu1gr772nnf6ve5af002rwya")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model users_role {
+  users_id                         BigInt
+  role_id                          BigInt
+  user_id                          BigInt
+  role                             role   @relation(fields: [role_id], references: [id], onUpdate: Restrict, map: "FK3qjq7qsiigxa82jgk0i0wuq3g")
+  users_users_role_users_idTousers users  @relation("users_role_users_idTousers", fields: [users_id], references: [id], onUpdate: Restrict, map: "FKiu0xsee0dmwa28nffgyf4bcvc")
+  users_users_role_user_idTousers  users  @relation("users_role_user_idTousers", fields: [user_id], references: [id], onUpdate: Restrict, map: "FKqpe36jsen4rslwfx5i6dj2fy8")
+
+  @@index([role_id], map: "FK3qjq7qsiigxa82jgk0i0wuq3g")
+  @@index([users_id], map: "FKiu0xsee0dmwa28nffgyf4bcvc")
+  @@index([user_id], map: "FKqpe36jsen4rslwfx5i6dj2fy8")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model users_roles {
+  user_id  BigInt
+  roles_id BigInt
+  role     role   @relation(fields: [roles_id], references: [id], onUpdate: Restrict, map: "FK15d410tj6juko0sq9k4km60xq")
+  users    users  @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "FK2o0jvgh89lemvvo17cbqvdxaa")
+
+  @@index([roles_id], map: "FK15d410tj6juko0sq9k4km60xq")
+  @@index([user_id], map: "FK2o0jvgh89lemvvo17cbqvdxaa")
+  @@ignore
+}
+
+model usertest {
+  idusertest Int    @id @default(autoincrement())
+  email      String @db.VarChar(45)
+  password   String @db.VarChar(255)
+  name       String @db.VarChar(45)
+}
