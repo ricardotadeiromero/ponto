@@ -12,8 +12,8 @@ export class ScheduleService {
   async create(data: CreateScheduleDto) {
     console.log(data);
     return await this.prisma
-      .$executeRaw`INSERT into schedule (teacher_id,day_of_week,start_time,end_time,total_hours)
-     values (${data.teacher_id},${data.day_of_week},${data.start_time},${data.end_time},TIME_FORMAT(TIMEDIFF(end_time,start_time),"%H:%i:%s"));`;
+      .$executeRaw`INSERT into schedule (teacher_id,day_of_week,start_time,end_time,break_time,total_hours)
+     values (${data.teacher_id},${data.day_of_week},${data.start_time},${data.end_time},${data.break_time},TIME_FORMAT(TIMEDIFF(end_time,start_time),"%H:%i:%s"));`;
   }
 
   async checkSchedule(data: checkScheduleDTO) {

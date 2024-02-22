@@ -53,12 +53,7 @@ export class CheckService {
       `;
       console.log('result', results);
       if (results) {
-        console.log(
-          'banco de horas',
-          (new Date(results['time_difference']).getTime() -
-            new Date(totalHours['total_hours']).getTime()) /
-            60,
-        );
+      
       }
       return;
     }
@@ -76,8 +71,6 @@ export class CheckService {
         enter: 1,
       },
     });
-    console.log(new Date(new Date().setHours(0, 0, 0, 0)).toISOString());
-    console.log(check.length > 0);
     return check.length > 0;
   }
 

@@ -444,6 +444,7 @@ model schedule {
   id          Int     @id @default(autoincrement())
   teacher_id  Int?
   day_of_week Int?
+  break_time String? @db.VarChar(10)
   start_time  String? @db.VarChar(10)
   end_time    String? @db.VarChar(10)
   total_hours String? @db.VarChar(10)
